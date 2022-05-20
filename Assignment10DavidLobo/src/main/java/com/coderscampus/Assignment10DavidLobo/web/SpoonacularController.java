@@ -3,7 +3,7 @@ package com.coderscampus.Assignment10DavidLobo.web;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -34,6 +34,16 @@ public class SpoonacularController {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.spoonacular.com/mealplanner/generate")
 			    .queryParam("timeFrame", timeFrame)
 			    .queryParam("apiKey", "0bc24d758a394a66b203dbb0d029f4df");
+		if(!StringUtils.isEmpty(numCalories)) {
+			builder = builder.queryParam("targetCalories", Integer.parseInt(numCalories));
+		}
+		if(!StringUtils.isEmpty(diet)) {
+			builder = builder.queryParam("diet", diet);
+		}
+		if(!StringUtils.isEmpty(exclusions)) {
+			builder = builder.queryParam("exclude", exclusions);
+		}
+		
 		URI uri = builder.build().toUri();
 		RestTemplate rt = new RestTemplate();
 		ResponseEntity<?> responseEntity = rt.getForEntity(uri, responseClass);
